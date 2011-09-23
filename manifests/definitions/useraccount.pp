@@ -58,8 +58,6 @@ define users::useraccount ( $ensure = present, $fullname, $uid = '', $groups = [
         }
     }
 
-    case $ensure {
-        present: {
             if versioncmp($puppetversion, '0.25') >= 0 {
                 $managedDirs = [
                     "/etc/puppet/files/users/home/managed/host/${username}.$fqdn",
@@ -150,8 +148,6 @@ define users::useraccount ( $ensure = present, $fullname, $uid = '', $groups = [
                 require => File["/home/${username}"],
             }
         }
-    }
-}
 
 # vim modeline - have 'set modeline' and 'syntax on' in your ~/.vimrc.
 # vi:syntax=puppet:filetype=puppet:ts=4:et:
