@@ -71,9 +71,9 @@ define users::useraccount ( $ensure = present, $fullname, $uid = '', $groups = [
       case generate('/etc/puppet/modules/users/scripts/findDirs.sh', $managedDirs) {
         '': {
           file { "/home/${username}":
-          ensure       => $ensure ? {
-            present => directory,
-            absent  => absent,
+            ensure       => $ensure ? {
+              present => directory,
+              absent  => absent,
             },
             owner        => $home_owner,
             group        => $home_group,
@@ -96,18 +96,18 @@ define users::useraccount ( $ensure = present, $fullname, $uid = '', $groups = [
         }
         default: {
           file { "/home/${username}":
-          ensure       => $ensure ? {
-            present => directory,
-            absent  => absent,
+            ensure        => $ensure ? {
+              present => directory,
+              absent  => absent,
             },
-            owner        => $home_owner,
-            group        => $home_group,
-            #mode        => 644, # Cannot apply mode, or it will change ALL files
-            recurse      => remote,
-            replace      => true,
-            force        => true,
-            ignore       => '.git',
-            source       => [
+            owner         => $home_owner,
+            group         => $home_group,
+            #mode         => 644, # Cannot apply mode, or it will change ALL files
+            recurse       => remote,
+            replace       => true,
+            force         => true,
+            ignore        => '.git',
+            source        => [
             "puppet:///files/users/home/managed/host/${username}.$fqdn",
             "puppet:///files/users/home/managed/host/${username}.$hostname",
             "puppet:///files/users/home/managed/domain/${username}.$domain",
@@ -115,38 +115,38 @@ define users::useraccount ( $ensure = present, $fullname, $uid = '', $groups = [
             "puppet:///files/users/home/managed/user/${username}",
             "puppet:///files/users/home/managed/skel",
             ],
-            sourceselect => all,
-            require      => User["${username}"],
+            sourceselect  => all,
+            require       => User["${username}"],
           }
         }
       }
       } else {
         file { "/home/${username}":
-        ensure  => $ensure ? {
-          present => directory,
-          absent  => absent,
+          ensure  => $ensure ? {
+            present => directory,
+            absent  => absent,
           },
           owner   => $home_owner,
           group   => $home_group,
           mode    => 644, # Cannot apply mode, or it will change ALL files
-          require   => User["${username}"],
+          require => User["${username}"],
         }
       }
 
       file { "/home/${username}/.bash_history":
-      mode => 600,
-      owner   => $home_owner,
-      group   => $home_group,
-      require => File["/home/${username}"],
-    }
+        mode => 600,
+        owner   => $home_owner,
+        group   => $home_group,
+        require => File["/home/${username}"],
+      }
 
-    file { "/home/${username}/.ssh":
-    ensure  => directory,
-    owner   => $home_owner,
-    group   => $home_group,
-    mode    => 700,
-    require => File["/home/${username}"],
-  }
+      file { "/home/${username}/.ssh":
+        ensure  => directory,
+        owner   => $home_owner,
+        group   => $home_group,
+        mode    => 700,
+        require => File["/home/${username}"],
+      }
 }
 
 # vim modeline - have 'set modeline' and 'syntax on' in your ~/.vimrc.
